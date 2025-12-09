@@ -109,10 +109,7 @@ impl Image for Mongo {
             ])
             .with_cmd_ready_condition(CmdWaitFor::message_on_stdout(
                 "Using a default configuration for the set",
-            ))
-            .with_container_ready_conditions(vec![WaitFor::message_on_stdout(
-                "Rebuilding PrimaryOnlyService due to stepUp",
-            )])]),
+            ))),
         }
     }
 }
