@@ -101,17 +101,15 @@ impl Image for Mongo {
     ) -> Result<Vec<ExecCommand>, testcontainers::TestcontainersError> {
         match self.kind {
             InstanceKind::Standalone => Ok(Default::default()),
-            InstanceKind::ReplSet => Ok(vec![
-                ExecCommand::new(vec![
-                    "mongosh".to_string(),
-                    "--quiet".to_string(),
-                    "--eval".to_string(),
-                    "'rs.initiate()'".to_string(),
-                ])
-                .with_cmd_ready_condition(CmdWaitFor::message_on_stdout(
-                    "Using a default configuration for the set",
-                )),
-            ]),
+            InstanceKind::ReplSet => Ok(vec![ExecCommand::new(vec![
+                "mongosh".to_string(),
+                "--quiet".to_string(),
+                "--eval".to_string(),
+                "'rs.initiate()'".to_string(),
+            ])
+            .with_cmd_ready_condition(CmdWaitFor::message_on_stdout(
+                "Using a default configuration for the set",
+            ))]),
         }
     }
 }
