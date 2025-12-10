@@ -96,7 +96,7 @@ impl Image for Mongo {
     }
 
     fn exec_after_start(
-        &self,
+    &self,
         _: testcontainers::core::ContainerState,
     ) -> Result<Vec<ExecCommand>, testcontainers::TestcontainersError> {
         match self.kind {
@@ -105,11 +105,14 @@ impl Image for Mongo {
                 "mongosh".to_string(),
                 "--quiet".to_string(),
                 "--eval".to_string(),
-                "'rs.initiate()'".to_string(),
+                r#"rs.initiate()"#.to_string(),
             ])
             .with_cmd_ready_condition(CmdWaitFor::message_on_stdout(
-                "Using a default configuration for the set",
-            ))]),
+                r#"Using a default configuration for the set"#,
+            ))
+            .with_container_ready_conditions(vec![WaitFor::message_on_stdout(
+                r#""newState":"PRIMARY""#,
+            )])]),
         }
     }
 }
